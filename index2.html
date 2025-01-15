@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+     <div id="authen">
+        <h3 style="color: purple;">log in or log up</h3>
+        <input type="email" placeholder="email" id="userEmail" ><br> <br>
+        <input type="password" placeholder="password" id="userPassword" ><br> <br>
+        <button id="login" style="color: purple;">log in</button>
+        <button id="logup" style="color: purple;" >log up</button>
+     </div><br><br>
+
+     <div id="secret" style="display: none;">
+        <h3 style="color: purple;"> Hello! Best products, Best services</h3>
+        <button id="logout" style="color: purple;">log out</button>
+     </div>
+
+    
+
+
+
+
+
+     <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import {getAuth,
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword,
+            onAuthStateChanged,
+            signOut } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+          apiKey: "AIzaSyDAR80DwAkejOev9k1g2kEnONn6pvqgmrs",
+          authDomain: "fir-test-9da99.firebaseapp.com",
+          projectId: "fir-test-9da99",
+          storageBucket: "fir-test-9da99.firebasestorage.app",
+          messagingSenderId: "231764632927",
+          appId: "1:231764632927:web:fa21f811fa53c9085ec2ea",
+          measurementId: "G-SFZZTB2SMV"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+
+    
+
+
+        const userEmail= document.querySelector("#userEmail");
+        const userPassword= document.querySelector("#userPassword");
+        const authen= document.querySelector("#authen");
+        const secret= document.querySelector("#secret");
+        const login= document.querySelector("#login");
+        const logup= document.querySelector("#logup");
+        const logout= document.querySelector("#logout");
+
+        
+
+
+        const userLogUp= async () =>{
+            const logUpEmail= userEmail.value
+            const logUpPassword= userPassword.value
+
+            createUserWithEmailAndPassword(auth, logUpEmail, logUpPassword)
+
+    
+            .then((userCredential)=>{
+                const user = userCredential.user;
+                console.log(user);
+                alert("your account has been created")
+            })
+            .catch((error)=>
+             {const errorcode= error.code;
+                const errorMessage= error.message;
+            console.log(errorcode + errorMessage)
+             })
+        }
+        
+        logup.addEventListener('click', userLogUp);
+
+
+        const userLogIn= async () =>{
+            const logInEmail= userEmail.value
+            const logInPassword= userPassword.value
+
+            signInWithEmailAndPassword(auth, logInEmail, logInPassword)
+
+    
+            .then((userCredential)=>{
+                const user = userCredential.user;
+                console.log(user);
+                alert("you have loged in")
+            })
+            .catch((error)=>
+             {const errorcode= error.code;
+                const errorMessage= error.message;
+            console.log(errorcode + errorMessage)
+             })
+        }
+        
+        login.addEventListener('click', userLogIn);
+
+
+
+
+        const checkAuthState= async () =>{
+            onAuthStateChanged(auth, user =>{
+                if ( user) {
+                    authen.style.display('none');
+                    secret.style.display('block')
+                }
+                else{
+                    authen.style.display('block');
+                    secret.style.display('none')
+
+                }
+            })
+        }
+        
+        checkAuthState();
+
+
+        const userLogOut= async()=>{
+            await logout(auth);
+        }
+        logout.addEventListener('click', userLogOut);
+
+
+
+
+
+
+       
+
+
+
+      </script>
+
+
+</body>
+</html>
